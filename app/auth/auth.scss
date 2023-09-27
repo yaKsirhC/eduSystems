@@ -1,0 +1,18 @@
+.auth {
+	h2 {
+		@apply text-lg;
+	}
+	fieldset {
+		@apply flex gap-2 flex-col;
+		input {
+			@apply py-2 px-4 outline-double outline-2 outline-gray-300 transition-all;
+	
+			&:hover {
+				@apply outline-cgreen;
+			}
+			&:focus {
+				@apply outline-dcgreen;
+			}
+		}
+	}
+}

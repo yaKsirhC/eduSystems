@@ -1,0 +1,46 @@
+.create-course {
+	display: grid;
+	grid-template-columns: 2fr 5fr;
+	grid-template-rows:max-content 1fr;
+	@apply p-4 gap-x-6 gap-y-2;
+
+	.btns {
+		grid-area: 1/1/1/6;
+	}
+	.preview{
+		grid-area: 2/2/2/6;
+		@apply bg-slate-100 p-4 rounded-lg flex flex-col gap-1;
+	}
+
+	fieldset {
+		@apply bg-slate-100 p-4 rounded-lg flex flex-col gap-1;
+
+		label {
+			@apply text-lg;
+		}
+
+		input, textarea {
+			@apply py-1 px-2 ; 
+		}
+	}
+}
+
+.create-assignment {
+	display: grid;
+	grid-template-rows: max-content 1fr;
+
+	@apply p-4 gap-x-6 gap-y-2;
+
+	fieldset {
+		@apply bg-slate-100 p-4 rounded-lg flex flex-col gap-1;
+	
+		label {
+			@apply text-lg;
+		}
+	
+		input, textarea {
+			@apply py-1 px-2 ; 
+		}
+	}
+	
+}

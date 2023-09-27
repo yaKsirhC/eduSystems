@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Multiple Courses, Schools
+model Teacher {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  profession String
+  courses    Course[] @relation(fields: [courseIDs], references: [id])
+  courseIDs  String[] @db.ObjectId
+  email      String   @unique
+  password   String
+  schools    School[] @relation(fields: [schoolId], references: [id])
+  schoolId   String[] @db.ObjectId
+}
+
+// Multiple Courses, Schools
+model Student {
+  id            String              @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  enrollments   Course[]            @relation(fields: [enrollmentIDs], references: [id])
+  enrollmentIDs String[]            @db.ObjectId
+  email         String              @unique
+  password      String
+  school        School[]            @relation(fields: [schoolID], references: [id])
+  schoolID      String[]            @db.ObjectId
+  submissions   StudentSubmission[]
+}
+
+model Admin {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String @unique
+  password String
+
+  school   School @relation(fields: [schoolId], references: [id])
+  schoolId String @unique @db.ObjectId
+}
+
+// Multiple Teachers, Students
+model School {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  teachers   Teacher[] @relation(fields: [teacherIDs], references: [id])
+  teacherIDs String[]  @db.ObjectId
+  students   Student[] @relation(fields: [studentIDs], references: [id])
+  studentIDs String[]  @db.ObjectId
+  admin      Admin?
+}
+
+// Multiple Teachers, Students
+model Course {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  assignments Assignment[]
+  description String
+  teachers    Teacher[]    @relation(fields: [teacherID], references: [id])
+  teacherID   String[]     @db.ObjectId
+  students    Student[]    @relation(fields: [studentID], references: [id])
+  studentID   String[]     @db.ObjectId
+}
+
+model Assignment {
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  attachments String[]
+  points      Int
+  submissions StudentSubmission[]
+  course      Course              @relation(fields: [courseID], references: [id])
+  courseID    String              @db.ObjectId
+}
+
+model StudentSubmission {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  answer       String
+  note         String
+  grade        Float
+  assignment   Assignment @relation(fields: [assignmentID], references: [id])
+  assignmentID String     @db.ObjectId
+  student      Student    @relation(fields: [studentId], references: [id])
+  studentId    String     @db.ObjectId
+}
