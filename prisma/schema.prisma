@@ -83,8 +83,8 @@ model Assignment {
 model StudentSubmission {
   id           String     @id @default(auto()) @map("_id") @db.ObjectId
   answer       String
-  note         String
-  grade        Float
+  note         String?
+  grade        Float?
   assignment   Assignment @relation(fields: [assignmentID], references: [id])
   assignmentID String     @db.ObjectId
   student      Student    @relation(fields: [studentId], references: [id])

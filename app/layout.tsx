@@ -5,8 +5,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import ModalProvider from "./context/ModalProvider";
-import AdminsSidebar from "./admin/Admin.sidebar";
 import Header from "./components/Header";
+import AuthProvider from "./context/AuthProvider";
+import AdminsSidebar from "./components/Admin.sidebar";
+import Dashboard from "./components/Dashboard";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +22,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={inter.className}>
         <ModalProvider>
-          <div id="root">
-            <Header />
-            <AdminsSidebar></AdminsSidebar>
-            {children}
-          </div>
+          <AuthProvider>
+            <>
+              <div id="root">
+              <Header />
+              <Dashboard />
+                {children}
+              </div>
+            </>
+          </AuthProvider>
         </ModalProvider>
         <ToastContainer theme="colored" position="top-center" />
       </body>

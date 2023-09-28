@@ -110,7 +110,6 @@ export default function PageContent({ students, teachers }: props) {
     const teachers = course.teachers.map((teacher) => ({
       id: teacher.id
     }));
-    console.log(course.assignments)
     try {
       const createdCourse = await createCourse(course.description, course.name, students, course.assignments, teachers);
     } catch (error: any) {

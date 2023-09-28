@@ -1,6 +1,6 @@
-import Admin from "../Admin";
+import Admin from "./Admin";
 import prisma from "@/app/prisma";
-import "../../styles/adminHome.scss";
+import "../styles/adminHome.scss";
 import { s3 } from "@/app/aws";
 
 export default async function AdminHome() {

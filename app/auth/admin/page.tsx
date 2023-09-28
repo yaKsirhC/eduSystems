@@ -2,12 +2,25 @@
 
 import Link from 'next/link';
 import '../auth.scss'
-import { FormEvent } from 'react';
+import { FormEvent, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import http from '@/app/restClient';
+import { authContext } from '@/app/context/AuthProvider';
+import { Admin, Student } from '@prisma/client';
+import { useRouter } from 'next/navigation';
+import { getCookie } from '@/app/utils/getCookie';
 
 export default function page() {
+// @ts-ignore
+	const {setUser} = useContext(authContext)
+	const router = useRouter()
+
+	useEffect(() => {
+		if(getCookie("auth2")){
+			router.push('/')
+		}
+	},[])
 
 	async function handleSubmit(e: FormEvent){
 		e.preventDefault()
@@ -16,9 +29,12 @@ export default function page() {
 		const password = formData.get('password')
 		if(!email||!password)return toast.error("Missing field")
 		try {
-			const res = await http.post("/auth", {
+			const res = await http.post<Admin>("/auth", {
 				email, password, role: "admin"
 			})
+			console.log(res.data)
+			setUser({email: res.data.email, name: res.data.name, role: "admin" })
+			router.push('/')
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error.response.data??error.message)
@@ -34,11 +50,11 @@ export default function page() {
 		  <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4 mt-16 self-center">
 			<fieldset>
 			  <h2>Email</h2>
-			  <input type="email" required />
+			  <input name='email' type="email" required />
 			</fieldset>
 			<fieldset>
 			  <h2>Password</h2>
-			  <input type="password" required />
+			  <input name='password' type="password" required />
 			</fieldset>
 			<div className="btns flex self-stretch gap-2">
 			  <button className="px-2 py-1 bg-cgreen text-white hover:bg-dcgreen w-full text-xl">Log in</button>

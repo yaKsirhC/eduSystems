@@ -5,11 +5,24 @@ import {Icon} from '@iconify-icon/react'
 
 import '../auth.scss'
 import Link from 'next/link';
-import { FormEvent } from 'react';
+import { FormEvent, useContext, useEffect } from 'react';
 import http from '@/app/restClient';
+import { Student } from '@/app/types';
+import { useRouter } from 'next/navigation';
+import { getCookie } from '@/app/utils/getCookie';
+import { authContext } from '@/app/context/AuthProvider';
 
 
 export default function page() {
+	// @ts-ignore
+	const {setUser} = useContext(authContext)
+	const router = useRouter()
+
+	useEffect(() => {
+		if(getCookie("auth2")){
+			router.push('/')
+		}
+	},[])
 
 	async function handleSubmit(e: FormEvent){
 		e.preventDefault()
@@ -18,9 +31,12 @@ export default function page() {
 		const password = formData.get('password')
 		if(!email||!password)return toast.error("Missing field")
 		try {
-			const res = await http.post("/auth", {
+			const res = await http.post<Student>("/auth", {
 				email, password, role: "student"
 			})
+			console.log(res.data)
+			setUser({email: res.data.email, name: res.data.name, role: "student" })
+			router.push('/')
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error.response.data??error.message)

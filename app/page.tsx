@@ -1,7 +1,11 @@
-import Image from 'next/image'
-import AdminHome from './admin/home/Admin.home'
+import AdminLayout from './admin/AdminLayout'
+import AdminHome from './admin/Admin.home'
 
 export default function Home() {
-  return <AdminHome />
+  return (
+    <AdminLayout>
+      <AdminHome />
+    </AdminLayout>
+  )
 }
  

@@ -30,6 +30,7 @@
   "devDependencies": {
     "@iconify-icon/react": "^1.0.8",
     "@types/bcrypt": "^5.0.0",
+    "cookies-next": "^4.0.0",
     "prisma": "^5.3.1",
     "react-select": "^5.7.5",
     "sass": "^1.68.0"
