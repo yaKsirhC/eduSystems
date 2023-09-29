@@ -5,6 +5,35 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { Assignment } from "../types";
 
+export async function gradeAssignment(submissionID: string, grade: number) {
+  try {
+    await prisma.studentSubmission.update({
+      where: { id: submissionID },
+      data: {
+        grade,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    return { error: err };
+  }
+}
+
+export async function uploadNote(submissionID: string, note: File) {
+  const noteURL = "https://edusystems.nyc3.cdn.digitaloceanspaces.com/DeepinScreenshot_select-area_20230926221803.png";
+  try {
+    await prisma.studentSubmission.update({
+      where: { id: submissionID },
+      data: {
+        note: noteURL,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    return { error: err };
+  }
+}
+
 export async function submitAssignment(answer: string, assignmentID: string, studentId: string) {
   try {
     const submission = await prisma.studentSubmission.create({
@@ -30,11 +59,10 @@ export async function submitAssignment(answer: string, assignmentID: string, stu
         },
       },
     });
-    revalidatePath('/assignment?assignmentID='+assignmentID)
-  } catch (error:any) {
+    revalidatePath("/assignment?assignmentID=" + assignmentID);
+  } catch (error: any) {
     console.error(error);
     return { error: error.message };
-    
   }
 }
 
@@ -50,7 +78,7 @@ export async function enrollStudent(studentID: string, courseID: string) {
 }
 
 export async function getUserInfo(auth: string) {
-  const stud = await prisma.student.findFirst({ where: { id: auth }, include:{enrollments:true,school:true,submissions:true} });
+  const stud = await prisma.student.findFirst({ where: { id: auth }, include: { enrollments: true, school: true, submissions: true } });
   if (stud) {
     return { user: stud, role: "student" };
   }
