@@ -33,7 +33,7 @@ export default function CourseClient({ course, assignments, students, teachers }
         <h2>Teachers:</h2>
         <ul>
           {teachers.map((teacher) => {
-            return <p>{teacher.name}</p>;
+            return <p key={teacher.id}>{teacher.name}</p>;
           })}
         </ul>
       </div>
@@ -41,7 +41,7 @@ export default function CourseClient({ course, assignments, students, teachers }
         <h2>Assignments in the Course:</h2>
         <ul>
           {assignments.map((assignment) => {
-            return <Link href={"/assignment?assignmentID="+assignment.id}>
+            return <Link key={assignment.id} href={"/assignment?assignmentID="+assignment.id}>
 				<p>{assignment.name}</p>
 				<p>{assignment.description}</p>
 				<p>{assignment.points}</p>

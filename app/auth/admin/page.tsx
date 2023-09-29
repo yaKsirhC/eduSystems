@@ -11,7 +11,7 @@ import { Admin, Student } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/app/utils/getCookie';
 
-export default function page() {
+export default function Page() {
 // @ts-ignore
 	const {setUser} = useContext(authContext)
 	const router = useRouter()

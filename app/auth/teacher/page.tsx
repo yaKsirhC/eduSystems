@@ -5,14 +5,13 @@ import '../auth.scss'
 import { Icon } from '@iconify-icon/react/dist/iconify.js';
 import Link from 'next/link';
 import { FormEvent, useContext, useEffect } from 'react';
-import axios from 'axios';
 import http from '@/app/restClient';
 import { Teacher } from '@/app/types';
 import { authContext } from '@/app/context/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/app/utils/getCookie';
 
-export default function page() {
+export default function Page() {
 	// @ts-ignore
 	const {setUser} = useContext(authContext)
 	const router = useRouter()

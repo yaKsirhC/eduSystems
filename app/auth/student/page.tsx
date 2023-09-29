@@ -13,7 +13,7 @@ import { getCookie } from '@/app/utils/getCookie';
 import { authContext } from '@/app/context/AuthProvider';
 
 
-export default function page() {
+export default function Page() {
 	// @ts-ignore
 	const {setUser} = useContext(authContext)
 	const router = useRouter()

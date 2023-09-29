@@ -1,11 +1,10 @@
 "use client"
 
-import { Modal,ModalContextInterface } from "@/next-env";
 import { Icon } from "@iconify-icon/react";
 import React, { createContext, useState } from "react";
 import '../styles/modal.scss'
 
-export const modalContext = createContext<ModalContextInterface>({
+export const modalContext = createContext<any>({
   modal: {
     element: undefined,
     title: "",
@@ -14,7 +13,7 @@ export const modalContext = createContext<ModalContextInterface>({
 });
 
 export default function ModalProvider({ children }: { children: JSX.Element }) {
-  const [modal, setModal] = useState<Modal>({
+  const [modal, setModal] = useState<any>({
     element: undefined,
     title: "",
   });

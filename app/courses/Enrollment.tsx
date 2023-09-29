@@ -8,7 +8,7 @@ export default function Enrollment({course}: {course: Course&{teachers: Teacher[
 		<ul>
 			{
 				course.teachers.map(teacher=> {
-					return <div>
+					return <div key={teacher.id}>
 						<p>{teacher.name}</p>
 					</div>
 				})

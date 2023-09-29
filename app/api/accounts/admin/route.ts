@@ -1,8 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import prisma from "../../../prisma";
 import bcrypt from 'bcrypt'
-import { cookies } from "next/headers";
-import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
 	const {email, password,name} = await req.json();
@@ -13,10 +11,10 @@ export async function POST(req: Request) {
 	try {
 		const user = await prisma.admin.create({data:{email,name,password:hash,school:{create:{name:"test school"}}}})
 		console.log('tseet')
-		return {user}
+	return NextResponse.json(user)
 	} catch (error) {
 		console.error(error);
 		new Response(error as any, {status:500})
-		
+		return NextResponse.json({error}, {status:500})
 	}
 }

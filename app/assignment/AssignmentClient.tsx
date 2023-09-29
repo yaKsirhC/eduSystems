@@ -27,9 +27,9 @@ export default function AssignmentClient({ course, assignment }: props) {
       <div className="">
         <p>Attachments</p>
         <ul>
-          {assignment.attachments.map((attachment) => {
+          {assignment.attachments.map((attachment,i) => {
             return (
-              <a href={attachment}>
+              <a key={i} href={attachment}>
                 <Icon icon="bx:file" />
               </a>
             );
