@@ -9,6 +9,7 @@ export default function Header() {
   // @ts-ignore
   const { user, setUser } = useContext(authContext);
   const router = useRouter()
+  if(!user.name) return <></>
 
   function logOut() {
     eraseCookie('auth2')
@@ -25,7 +26,7 @@ export default function Header() {
             <button className="exit" onClick={()=>{
               eraseCookie("auth2")
               logOut()
-              router.push('/')
+              router.push('/auth/student')
             }}>Exit</button>
           </div>
         )

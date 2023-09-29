@@ -125,9 +125,14 @@ export default function Admin({ courses, students, teachers }: props) {
               <Icon icon="material-symbols:add" color="inherit" />
             </Link>
           </h1>
+          <ul>
           {courses.map((course) => {
-            return course.id;
+            return <li key={course.id}>
+              {course.name}
+            </li>;
           })}
+
+          </ul>
         </section>
         <section>
           <h1>
