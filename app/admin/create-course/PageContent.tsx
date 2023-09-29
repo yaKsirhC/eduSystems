@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import Assignments from "./Assignments";
 
 import { Admin, Assignment, Course, School, Student, Submission, Teacher } from "../../types";
-import { createCourse } from "@/app/utils/serverActions";
+import { createCourse, uploadToS3 } from "@/app/utils/serverActions";
 
 interface props {
   teachers: Teacher[];
@@ -40,8 +40,8 @@ export default function PageContent({ students, teachers }: props) {
     attachments: [],
     description: "",
     name: "",
-    students:[],
-    teachers:[],
+    students: [],
+    teachers: [],
   });
   const [assignment, setAssignment] = useState<Assignment>({
     attachments: [],
@@ -56,9 +56,25 @@ export default function PageContent({ students, teachers }: props) {
     const target = e.target as HTMLInputElement;
     const name = target.name;
     if (name == "attachments") {
+      if (!target.files || target.files.length == 0) {
+        setCourse((pre: any) => ({
+          ...pre,
+          [name]: [],
+        }));
+        return;
+      }
+      const urls = await Promise.all(
+        Array.from(target.files).map(async (file) => {
+          const tmp = new FormData()
+          tmp.append("file2upload", file)
+          // TOFIX
+          const url = await uploadToS3(tmp);
+          return url;
+        })
+      );
       setCourse((pre: any) => ({
         ...pre,
-        [name]: ["https://edusystems.nyc3.cdn.digitaloceanspaces.com/DeepinScreenshot_select-area_20230926221803.png", "https://edusystems.nyc3.cdn.digitaloceanspaces.com/DeepinScreenshot_select-area_20230926221803.png"],
+        [name]: urls,
       }));
       return;
     }
@@ -94,8 +110,8 @@ export default function PageContent({ students, teachers }: props) {
     const attachments = formData.getAll("attachments").map((attach) => attach.valueOf());
     console.log(attachments);
     if (!points || !name || !description || !attachments) return toast.error("Missing Fields");
-// @ts-ignore
-    course.assignments.push({attachments:["https://edusystems.nyc3.digitaloceanspaces.com"],description,name,points:parseInt(points)});
+    // @ts-ignore
+    course.assignments.push({ attachments: ["https://edusystems.nyc3.digitaloceanspaces.com"], description, name, points: parseInt(points) });
     setCourse((pre) => {
       return { ...pre, assignments: course.assignments };
     });
@@ -105,10 +121,10 @@ export default function PageContent({ students, teachers }: props) {
   async function handleCreateCourseSubmit(e: FormEvent) {
     e.preventDefault();
     const students = course.students.map((student) => ({
-      id: student.id
+      id: student.id,
     }));
     const teachers = course.teachers.map((teacher) => ({
-      id: teacher.id
+      id: teacher.id,
     }));
     try {
       const createdCourse = await createCourse(course.description, course.name, students, course.assignments, teachers);
@@ -161,7 +177,7 @@ export default function PageContent({ students, teachers }: props) {
           <fieldset>
             <label htmlFor="name">Assignments</label>
             {course.assignments.length > 0 ? (
-              course.assignments.map((assignment,i) => {
+              course.assignments.map((assignment, i) => {
                 // @ts-ignore
                 return <Assignments key={i} assignment={assignment} />;
               })

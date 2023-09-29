@@ -6,7 +6,7 @@ export default function TeacherDashboard() {
     <div className="sidebar">
       <h1>Teacher</h1>
       <div className="options mt-8 flex flex-col gap-4 text-lg">
-        <Link href="/">Courses</Link>
+        <Link href="/courses">Courses</Link>
         <Link href="/student-submissions">Student Submissions</Link>
         {/* <Link href="/"></Link> */}
       </div>

@@ -1,4 +1,5 @@
 import {Endpoint, S3} from 'aws-sdk/';
+import { generateRandomHex } from './utils/utils';
 
 console.log(process.env.ACCESS_KEY)
 

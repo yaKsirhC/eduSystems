@@ -6,9 +6,9 @@ export default function AdminsSidebar() {
     <section className="sidebar ">
       <h1 className="text-xl">Admin</h1>
       <div className="options mt-8 flex flex-col gap-4 text-lg">
-        <Link href="/">Students</Link>
-        <Link href="/">Teachers</Link>
-        <Link href="/">Courses</Link>
+        {/* <Link href="/">Students</Link> */}
+        {/* <Link href="/">Teachers</Link> */}
+        <Link href="/courses">Courses</Link>
       </div>
     </section>
   );

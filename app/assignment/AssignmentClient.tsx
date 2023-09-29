@@ -4,7 +4,7 @@ import { Icon } from "@iconify-icon/react/dist/iconify.js";
 import { Assignment, Course, StudentSubmission } from "@prisma/client";
 import React, { useContext } from "react";
 import { authContext } from "../context/AuthProvider";
-import { enrollStudent, submitAssignment } from "../utils/serverActions";
+import { enrollStudent, submitAssignment, uploadToS3 } from "../utils/serverActions";
 import Link from "next/link";
 import { toast } from "react-toastify";
 
@@ -42,8 +42,15 @@ export default function AssignmentClient({ course, assignment }: props) {
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
+                const formData = new FormData(e.target as HTMLFormElement);
+                const file = formData.get('answer') as File|null
+                if(!file) return toast.error("Please Provide an Answer")
+                // console.log(file)
+                const tmp = new FormData();
+                tmp.append("file2upload", file)
+                const url = await uploadToS3(tmp)
                 try {
-                  await submitAssignment("https://edusystems.nyc3.cdn.digitaloceanspaces.com/DeepinScreenshot_select-area_20230926221803.png", assignment.id, user.id);
+                  await submitAssignment(url, assignment.id, user.id);
                   toast.success("Submitted Assignment");
                 } catch (error: any) {
                   console.error(error);

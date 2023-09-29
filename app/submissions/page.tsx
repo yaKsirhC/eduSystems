@@ -5,7 +5,7 @@ import SubmissionClient from "./SubmissionClient";
 
 export default async function Submissions({ searchParams }: { searchParams: any }) {
   const auth = cookies().get("auth2")?.value;
-  const assignmentID = searchParams.assignmentID;
+  // const assignmentID = searchParams.assignmentID;
 
   const submissions = await prisma.studentSubmission.findMany({
     include: { student: true, assignment: true },

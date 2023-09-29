@@ -4,6 +4,17 @@ import prisma from "../prisma";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { Assignment } from "../types";
+import { s3 } from "../aws";
+import { generateRandomHex } from "./utils";
+
+export async function uploadToS3(formData: FormData) {
+  const file = formData.get("file2upload") as File;
+  console.log(file);
+
+  const response = await s3.upload({ Bucket: "edusystems", Key: file.name + "---" + generateRandomHex(5), Body: new Uint8Array(await file.arrayBuffer()) }).promise();
+  const fileURL = response.Location;
+  return fileURL;
+}
 
 export async function gradeAssignment(submissionID: string, grade: number) {
   try {
@@ -20,7 +31,9 @@ export async function gradeAssignment(submissionID: string, grade: number) {
 }
 
 export async function uploadNote(submissionID: string, note: File) {
-  const noteURL = "https://edusystems.nyc3.cdn.digitaloceanspaces.com/DeepinScreenshot_select-area_20230926221803.png";
+  const tmp = new FormData();
+  tmp.append("file2upload", note);
+  const noteURL = await uploadToS3(tmp);
   try {
     await prisma.studentSubmission.update({
       where: { id: submissionID },
@@ -59,7 +72,7 @@ export async function submitAssignment(answer: string, assignmentID: string, stu
         },
       },
     });
-    revalidatePath("/assignment?assignmentID=" + assignmentID);
+    redirect("/assignment?assignmentID=" + assignmentID);
   } catch (error: any) {
     console.error(error);
     return { error: error.message };
