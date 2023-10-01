@@ -9,7 +9,6 @@ import { generateRandomHex } from "./utils";
 
 export async function uploadToS3(formData: FormData) {
   const file = formData.get("file2upload") as File;
-  console.log(file);
   const cut = file.name.split('.')
   const ext = cut.at(-1)
   const name = cut.slice(0,-1)

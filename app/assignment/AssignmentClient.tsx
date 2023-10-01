@@ -45,7 +45,6 @@ export default function AssignmentClient({ course, assignment }: props) {
                 const formData = new FormData(e.target as HTMLFormElement);
                 const file = formData.get('answer') as File|null
                 if(!file) return toast.error("Please Provide an Answer")
-                // console.log(file)
                 const tmp = new FormData();
                 tmp.append("file2upload", file)
                 const url = await uploadToS3(tmp)

@@ -1,36 +1,10 @@
-"use client";
+import React from "react";
+import { cookies } from "next/headers";
+import HeaderClient from "./HeaderClient";
 
-import React, { useContext } from "react";
-import { authContext } from "../context/AuthProvider";
-import { eraseCookie } from "../utils/getCookie";
-import { useRouter } from "next/navigation";
+export default async function Header() {
+  const auth = cookies().get("auth2");
+  if (!auth) return <></>;
 
-export default function Header() {
-  // @ts-ignore
-  const { user, setUser } = useContext(authContext);
-  const router = useRouter()
-  if(!user.name) return <></>
-
-  function logOut() {
-    eraseCookie('auth2')
-    setUser({id:"",name:"",email:"",role:""})
-    return []
-  }
-
-  return (
-    <header className="border-b-2 px-4 border-slate-300 py-2 flex justify-end">
-      {
-        user && (
-          <div>
-            <h1 className="text-xl">{user.name&& user.name}</h1>
-            <button className="exit" onClick={()=>{
-              eraseCookie("auth2")
-              logOut()
-              router.push('/auth/student')
-            }}>Exit</button>
-          </div>
-        )
-      }
-    </header>
-  );
+  return <HeaderClient />;
 }
