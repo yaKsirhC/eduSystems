@@ -6,8 +6,6 @@ import React from 'react'
 
 export default function StudentDashboard() {
   const pathname = usePathname()
-  
-  console.log(pathname)
 
   return (
 	<div className="sidebar">
