@@ -10,10 +10,12 @@ import { generateRandomHex } from "./utils";
 export async function uploadToS3(formData: FormData) {
   const file = formData.get("file2upload") as File;
   console.log(file);
-
-  const response = await s3.upload({ Bucket: "edusystems", Key: file.name + "---" + generateRandomHex(5), Body: new Uint8Array(await file.arrayBuffer()) }).promise();
+  const cut = file.name.split('.')
+  const ext = cut.at(-1)
+  const name = cut.slice(0,-1)
+  const response = await s3.upload({ Bucket: "edusystems", Key: name + "---" + generateRandomHex(5) + "." + ext , Body: new Uint8Array(await file.arrayBuffer()),ACL: 'public-read',}).promise();
   const fileURL = response.Location;
-  return fileURL;
+  return fileURL
 }
 
 export async function gradeAssignment(submissionID: string, grade: number) {
@@ -72,7 +74,7 @@ export async function submitAssignment(answer: string, assignmentID: string, stu
         },
       },
     });
-    redirect("/assignment?assignmentID=" + assignmentID);
+    redirect("/submissions");
   } catch (error: any) {
     console.error(error);
     return { error: error.message };
